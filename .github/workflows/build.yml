@@ -21,13 +21,15 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Force Reconstruct Project
+      - name: Reconstruct Android Project
         run: |
-          # Remove any broken android folders if they exist
+          # 1. Ensure any old android folder is gone
           rm -rf android
-          # Force generate a brand new android project structure
-          flutter create . --platforms android --force
-          # Fetch your specific packages (intl, fl_chart, etc.)
+          
+          # 2. Create the android structure (template)
+          flutter create . --platforms android
+          
+          # 3. Get the packages (intl, fl_chart, etc.)
           flutter pub get
 
       - name: Build APK
