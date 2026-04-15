@@ -21,15 +21,25 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Reconstruct Android Project
+      - name: Fresh Project Generation
         run: |
-          # 1. Ensure any old android folder is gone
-          rm -rf android
+          # 1. Move your code to a temp folder so it doesn't block 'flutter create'
+          mkdir temp_lib
+          cp -r lib/* temp_lib/
+          cp pubspec.yaml temp_pubspec.yaml
           
-          # 2. Create the android structure (template)
-          flutter create . --platforms android
+          # 2. Delete everything in the current folder to make it truly empty
+          rm -rf *
           
-          # 3. Get the packages (intl, fl_chart, etc.)
+          # 3. Create a brand new flutter project from scratch
+          flutter create --platforms android --project-name grocery_budget_app .
+          
+          # 4. Put your custom code back into the new project
+          rm -rf lib/*
+          cp -r temp_lib/* lib/
+          cp temp_pubspec.yaml pubspec.yaml
+          
+          # 5. Final sync
           flutter pub get
 
       - name: Build APK
