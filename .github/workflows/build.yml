@@ -21,10 +21,13 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Repair Project Structure
+      - name: Force Reconstruct Project
         run: |
-          # This generates the missing 'android' folder automatically
-          flutter create . --platforms android
+          # Remove any broken android folders if they exist
+          rm -rf android
+          # Force generate a brand new android project structure
+          flutter create . --platforms android --force
+          # Fetch your specific packages (intl, fl_chart, etc.)
           flutter pub get
 
       - name: Build APK
